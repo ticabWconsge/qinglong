@@ -1,6 +1,7 @@
 import { defineConfig } from '@umijs/max';
 const CompressionPlugin = require('compression-webpack-plugin');
 
+const baseUrl = process.env.QlBaseUrl || '/';
 export default defineConfig({
   hash: true,
   antd: {},
@@ -12,15 +13,16 @@ export default defineConfig({
   },
   publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
   proxy: {
-    '/api/public': {
+    [`${baseUrl}api/public`]: {
       target: 'http://127.0.0.1:5400/',
       changeOrigin: true,
-      pathRewrite: { '^/api/public': '/api/' },
+      pathRewrite: { [`^${baseUrl}api/public`]: '/api' },
     },
-    '/api': {
+    [`${baseUrl}api`]: {
       target: 'http://127.0.0.1:5600/',
       changeOrigin: true,
       ws: true,
+      pathRewrite: { [`^${baseUrl}api`]: '/api' },
     },
   },
   chainWebpack: ((config: any) => {

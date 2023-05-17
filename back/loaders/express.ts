@@ -31,27 +31,6 @@ export default ({ app }: { app: Application }) => {
     }),
   );
 
-  app.use((req, res, next) => {
-    if (req.path.startsWith('/api') || req.path.startsWith('/open')) {
-      next();
-    } else {
-      return handler(req, res, {
-        public: path.join(config.rootPath, 'static/dist'),
-        rewrites: [{ source: '**', destination: '/index.html' }],
-        headers: [
-          {
-            source: 'index.html',
-            headers: [
-              {
-                key: 'Cache-Control',
-                value: 'no-cache',
-              },
-            ],
-          },
-        ],
-      });
-    }
-  });
   app.use(bodyParser.json({ limit: '50mb' }));
   app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
